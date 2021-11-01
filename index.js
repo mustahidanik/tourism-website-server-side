@@ -21,11 +21,17 @@ async function run() {
         await client.connect();
         const database = client.db('worldTour');
         const servicesCollection = database.collection('services');
+        const myOrderCollection = database.collection('myorder');
 
         app.get('/services', async (req, res) => {
             const cursor = servicesCollection.find({});
             const services = await cursor.toArray();
             res.send(services);
+        });
+        app.get('/myorder', async (req, res) => {
+            const cursur = myOrderCollection.find({});
+            const myorder = await cursur.toArray();
+            res.send(myorder);
         });
 
         app.get('/services/:id', async (req, res) => {
@@ -44,6 +50,14 @@ async function run() {
             const result = await servicesCollection.insertOne(service);
             console.log(result);
             res.json(result)
+        })
+        app.post('/myorder', async (req, res) => {
+
+            const myOrder = req.body;
+
+            const orderResult = await myOrderCollection.insertOne(myOrder);
+            console.log(orderResult);
+            res.json(orderResult)
         })
 
     }
